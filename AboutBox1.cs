@@ -12,8 +12,6 @@ namespace CW_RC5
         public AboutBox1()
         {
             InitializeComponent();
-            this.Text = String.Format("О программе {0}", AssemblyTitle);
-            
         }
 
         #region Методы доступа к атрибутам сборки
@@ -94,6 +92,12 @@ namespace CW_RC5
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
         }
+
         #endregion
+
+        private void OkButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
