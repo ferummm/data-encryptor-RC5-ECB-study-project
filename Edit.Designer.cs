@@ -31,14 +31,14 @@ namespace CW_RC5
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.keyLenUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.CancelButton1 = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
-            this.checkDigit = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.keyLenUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.checkLowerCase = new System.Windows.Forms.CheckBox();
             this.checkUpperCase = new System.Windows.Forms.CheckBox();
             this.checkSpecChar = new System.Windows.Forms.CheckBox();
+            this.checkDigit = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.keyLenUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -84,6 +84,30 @@ namespace CW_RC5
             this.label1.Text = "Настройка сложности:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // CancelButton1
+            // 
+            this.CancelButton1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.CancelButton1.Location = new System.Drawing.Point(10, 229);
+            this.CancelButton1.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.CancelButton1.Name = "CancelButton1";
+            this.CancelButton1.Size = new System.Drawing.Size(100, 30);
+            this.CancelButton1.TabIndex = 5;
+            this.CancelButton1.Text = "Отмена";
+            this.CancelButton1.UseVisualStyleBackColor = true;
+            this.CancelButton1.Click += new System.EventHandler(this.CancelButton_Click);
+            // 
+            // OkButton
+            // 
+            this.OkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.OkButton.Location = new System.Drawing.Point(272, 229);
+            this.OkButton.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
+            this.OkButton.Name = "OkButton";
+            this.OkButton.Size = new System.Drawing.Size(100, 30);
+            this.OkButton.TabIndex = 4;
+            this.OkButton.Text = "ОК";
+            this.OkButton.UseVisualStyleBackColor = true;
+            this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -115,42 +139,6 @@ namespace CW_RC5
             0,
             0,
             0});
-            // 
-            // CancelButton1
-            // 
-            this.CancelButton1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CancelButton1.Location = new System.Drawing.Point(10, 229);
-            this.CancelButton1.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-            this.CancelButton1.Name = "CancelButton1";
-            this.CancelButton1.Size = new System.Drawing.Size(100, 30);
-            this.CancelButton1.TabIndex = 5;
-            this.CancelButton1.Text = "Отмена";
-            this.CancelButton1.UseVisualStyleBackColor = true;
-            this.CancelButton1.Click += new System.EventHandler(this.CancelButton_Click);
-            // 
-            // OkButton
-            // 
-            this.OkButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.OkButton.Location = new System.Drawing.Point(272, 229);
-            this.OkButton.Margin = new System.Windows.Forms.Padding(3, 3, 10, 3);
-            this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(100, 30);
-            this.OkButton.TabIndex = 4;
-            this.OkButton.Text = "ОК";
-            this.OkButton.UseVisualStyleBackColor = true;
-            this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
-            // 
-            // checkDigit
-            // 
-            this.checkDigit.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.checkDigit.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.checkDigit, 2);
-            this.checkDigit.Location = new System.Drawing.Point(3, 48);
-            this.checkDigit.Name = "checkDigit";
-            this.checkDigit.Size = new System.Drawing.Size(84, 24);
-            this.checkDigit.TabIndex = 6;
-            this.checkDigit.Text = "Цифры";
-            this.checkDigit.UseVisualStyleBackColor = true;
             // 
             // checkLowerCase
             // 
@@ -187,6 +175,18 @@ namespace CW_RC5
             this.checkSpecChar.Text = "Спец. символы";
             this.checkSpecChar.UseVisualStyleBackColor = true;
             // 
+            // checkDigit
+            // 
+            this.checkDigit.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.checkDigit.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.checkDigit, 2);
+            this.checkDigit.Location = new System.Drawing.Point(3, 48);
+            this.checkDigit.Name = "checkDigit";
+            this.checkDigit.Size = new System.Drawing.Size(84, 24);
+            this.checkDigit.TabIndex = 6;
+            this.checkDigit.Text = "Цифры";
+            this.checkDigit.UseVisualStyleBackColor = true;
+            // 
             // Edit
             // 
             this.AcceptButton = this.OkButton;
@@ -198,6 +198,7 @@ namespace CW_RC5
             this.MinimumSize = new System.Drawing.Size(400, 310);
             this.Name = "Edit";
             this.Text = "Настройки парольной фразы";
+            this.Load += new System.EventHandler(this.Edit_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.keyLenUpDown1)).EndInit();

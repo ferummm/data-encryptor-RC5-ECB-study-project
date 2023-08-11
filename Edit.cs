@@ -36,5 +36,10 @@ namespace CW_RC5
             MainForm.minKeyLength = (int)keyLenUpDown1.Value;
             Close();
         }
+
+        private void Edit_Load(object sender, EventArgs e)
+        {
+            this.ActiveControl = keyLenUpDown1;
+        }
     }
 }

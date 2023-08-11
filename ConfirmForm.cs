@@ -35,5 +35,11 @@ namespace CW_RC5
         {
             ConfirmButton.Enabled = PasswordTextBox.Text != "";
         }
+
+        private void ConfirmForm_Load(object sender, EventArgs e)
+        {
+            this.ActiveControl = PasswordTextBox;
+        }
+
     }
 }

@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -53,18 +47,19 @@ namespace CW_RC5
             string err;
             try
             {
-                if ((err = PassPharseHasError(rc5)) != "") throw new ArgumentException(err);
-                if (!GotConfirmation()) return; 
+                if ((err = PassPharseHasError(rc5, PasswordTextBox.Text)) != "") throw new ArgumentException(err);
+                if (!GotConfirmation()) return;
+                byte[] pass_bytes = Encoding.Unicode.GetBytes(PasswordTextBox.Text);
                 switch (tabControl1.SelectedIndex)
                 {
                     case 0:
-                        EncryptFile(rc5);
+                        EncryptFile(rc5, pass_bytes);
                         break;
                     case 1:
-                        EncryptMessage(rc5);
+                        EncryptMessage(rc5, pass_bytes);
                         break;
                 }
-                
+
                 MessageBox.Show("Шифрование завершено.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
@@ -72,16 +67,21 @@ namespace CW_RC5
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        
+
         private void SelectButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Размер выбранного файла не должен превышать 2Гб.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             OpenFileDialog ofd = new OpenFileDialog();
-            
             if (ofd.ShowDialog() != DialogResult.OK) return;
-            
-            if (new FileInfo(ofd.FileName).Length / 1024 / 1024 / 1024 > 2) MessageBox.Show("Размер выбранного файла превышает 2Гб.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            try
+            {
+                if (new FileInfo(ofd.FileName).Length / 1024 / 1024 / 1024 > 2) throw new ArgumentException("Размер выбранного файла превышает 2Гб.");
 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             PathTextBox.Text = ofd.FileName;
         }
 
@@ -96,20 +96,20 @@ namespace CW_RC5
         {
             RC5CryptoManager rc5 = new RC5CryptoManager();
             try
-            { 
+            {
                 if (PasswordTextBox.Text == "") throw new ArgumentException("Введите парольную фразу.");
-
+                byte[] pass_bytes = Encoding.Unicode.GetBytes(PasswordTextBox.Text);
                 switch (tabControl1.SelectedIndex)
                 {
                     case 0:
-                        DecryptFile(rc5);
+                        DecryptFile(rc5, pass_bytes);
                         break;
                     case 1:
-                        DecryptMessage(rc5);
+                        DecryptMessage(rc5, pass_bytes);
                         break;
                 }
 
-                MessageBox.Show("Расшифровывание завершено.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Расшифрование завершено.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -119,12 +119,11 @@ namespace CW_RC5
 
         private void ShowСheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            PasswordTextBox.UseSystemPasswordChar = !ShowСheckBox.Checked; 
+            PasswordTextBox.UseSystemPasswordChar = !ShowСheckBox.Checked;
         }
 
         private void TabControl1_Selected(object sender, TabControlEventArgs e)
         {
-
             DecryptButton.Enabled = IsTabFileInUse() || IsTabMsgInUse();
             EncryptButton.Enabled = IsTabFileInUse() || IsTabMsgInUse();
             DeleteFileButton.Enabled = IsTabFileInUse();
@@ -152,7 +151,7 @@ namespace CW_RC5
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 PathTextBox.Text = "";
-            } 
+            }
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
@@ -174,7 +173,12 @@ namespace CW_RC5
                 MessageBox.Show("Сообщение сохранено в файл.", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            this.ActiveControl = (tabControl1.SelectedIndex == 1) ? MessageTextBox : PasswordTextBox;
+        }
+
         //------------------------------------------------------------------------------------------//
         public bool IsTabFileInUse()
         {
@@ -188,34 +192,42 @@ namespace CW_RC5
             return false;
         }
 
-        public void EncryptMessage(RC5CryptoManager rc5)
+        public void EncryptMessage(RC5CryptoManager rc5, byte[] pass_bytes)
         {
             byte[] text_bytes = Encoding.Unicode.GetBytes(MessageTextBox.Text);     // get bytes from textbox
-            byte[] enc_bytes = rc5.Encrypt(text_bytes, PasswordTextBox.Text);       // encrypt
-            MessageTextBox.Text = Encoding.Unicode.GetString(enc_bytes);            // write to textbox
+            byte[] enc_bytes = rc5.Encrypt(text_bytes, pass_bytes);                 // encrypt
+            MessageTextBox.Text = Convert.ToBase64String(enc_bytes);                // write to textbox
         }
 
-        public void EncryptFile(RC5CryptoManager rc5)
+        public void EncryptFile(RC5CryptoManager rc5, byte[] pass_bytes)
         {
             if (!File.Exists(PathTextBox.Text)) throw new ArgumentException("Файл, который вы хотите зашифровать, не существует.");
-            byte[] file_bytes = File.ReadAllBytes(PathTextBox.Text);                // get bytes from input file
-            byte[] enc_bytes = rc5.Encrypt(file_bytes, PasswordTextBox.Text);       // encrypt
-            SelectFile_WriteBytes(enc_bytes);
+            byte[] file_bytes = File.ReadAllBytes(PathTextBox.Text);      // get bytes from input file 
+            byte[] enc_bytes = rc5.Encrypt(file_bytes, pass_bytes);       // encrypt
+            SelectFile_WriteBytes(enc_bytes);                             // write to file
         }
 
-        public void DecryptMessage(RC5CryptoManager rc5)
+        public void DecryptMessage(RC5CryptoManager rc5, byte[] pass_bytes)
         {
-            byte[] text_bytes = Encoding.Unicode.GetBytes(MessageTextBox.Text);     // get bytes from textbox
-            byte[] dec_bytes = rc5.Decrypt(text_bytes, PasswordTextBox.Text);       // decrypt
+            byte[] text_bytes;
+            try 
+            {
+                text_bytes = Convert.FromBase64String(MessageTextBox.Text);     // get bytes from textbox  
+            } 
+            catch (Exception)
+            {
+                throw new ArgumentException("Расшифрование невозможно");
+            }
+            byte[] dec_bytes = rc5.Decrypt(text_bytes, pass_bytes);                  // decrypt
             if (!rc5.IsPassPhraseCorrect) throw new ArgumentException("Неверная парольная фраза.");
             MessageTextBox.Text = Encoding.Unicode.GetString(dec_bytes);            // write to textbox
         }
 
-        public void DecryptFile(RC5CryptoManager rc5)
+        public void DecryptFile(RC5CryptoManager rc5, byte[] pass_bytes)
         {
             if (!File.Exists(PathTextBox.Text)) throw new ArgumentException("Файл, который вы хотите расшифровать, не существует.");
             byte[] file_bytes = File.ReadAllBytes(PathTextBox.Text);                // get bytes from input file
-            byte[] dec_bytes = rc5.Decrypt(file_bytes, PasswordTextBox.Text);       // decrypt
+            byte[] dec_bytes = rc5.Decrypt(file_bytes, pass_bytes);                 // decrypt
             if (!rc5.IsPassPhraseCorrect) throw new ArgumentException("Неверная парольная фраза.");
             SelectFile_WriteBytes(dec_bytes);                                       // write to file
         }
@@ -228,7 +240,7 @@ namespace CW_RC5
                 RestoreDirectory = true
             };
 
-            if (saveFileDialog1.ShowDialog() != DialogResult.OK) throw new ArgumentException("Операция была прервана, так как не выбран файл для сохранения зашифрованной информации.");
+            if (saveFileDialog1.ShowDialog() != DialogResult.OK) throw new ArgumentException("Операция была прервана, так как не выбран файл для сохранения.");
 
             using (Stream stream = saveFileDialog1.OpenFile())
             {
@@ -236,14 +248,14 @@ namespace CW_RC5
             }
         }
 
-        public string PassPharseHasError(RC5CryptoManager rc5)
+        public string PassPharseHasError(RC5CryptoManager rc5, string pass)
         {
-            if (PasswordTextBox.Text.Length < minKeyLength) 
+            if (pass.Length < minKeyLength)
                 return "Количество символов в парольной фразе должно быть не меньше " + minKeyLength + ".";
 
             bool[] check;
 
-            if ((check = rc5.CheckPasswordPhrase(PasswordTextBox.Text, iD, iLC, iUC, iSC)) == null) 
+            if ((check = rc5.CheckPasswordPhrase(pass, iD, iLC, iUC, iSC)) == null)
                 return "";
 
             string err = "Парольная фраза должна содержать: \n";
@@ -251,11 +263,11 @@ namespace CW_RC5
             err += (!check[1]) ? "Строчную букву\n" : "";
             err += (!check[2]) ? "Прописную букву\n" : "";
             err += (!check[3]) ? "Спец. символ\n" : "";
-            
+
             return err;
         }
 
-        public bool GotConfirmation()
+        private bool GotConfirmation()
         {
             ConfirmForm confirm = new ConfirmForm(PasswordTextBox.Text);
             DialogResult dr;
@@ -264,5 +276,5 @@ namespace CW_RC5
             return true;
         }
     }
-}
+} 
 

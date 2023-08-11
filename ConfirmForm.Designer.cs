@@ -120,6 +120,7 @@ namespace CW_RC5
             this.MinimumSize = new System.Drawing.Size(415, 190);
             this.Name = "ConfirmForm";
             this.Text = "Подтверждение";
+            this.Load += new System.EventHandler(this.ConfirmForm_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);

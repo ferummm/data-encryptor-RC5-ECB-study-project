@@ -155,8 +155,9 @@ namespace CW_RC5
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.ImageAlign = System.Drawing.ContentAlignment.TopLeft;
             this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(492, 41);
+            this.label1.Size = new System.Drawing.Size(492, 38);
             this.label1.TabIndex = 3;
             this.label1.Text = "Нажмите \"Выбрать файл\", ниже появится путь к выбранному файлу:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -169,7 +170,7 @@ namespace CW_RC5
             this.tabPage2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tabPage2.Size = new System.Drawing.Size(502, 136);
+            this.tabPage2.Size = new System.Drawing.Size(504, 137);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Сообщение";
             // 
@@ -187,15 +188,15 @@ namespace CW_RC5
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.31579F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 73.68421F));
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(496, 132);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(498, 133);
             this.tableLayoutPanel3.TabIndex = 1;
             // 
             // SaveButton
             // 
             this.SaveButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SaveButton.Location = new System.Drawing.Point(3, 101);
+            this.SaveButton.Location = new System.Drawing.Point(3, 102);
             this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(490, 28);
+            this.SaveButton.Size = new System.Drawing.Size(492, 28);
             this.SaveButton.TabIndex = 1;
             this.SaveButton.Text = "Сохранить";
             this.SaveButton.UseVisualStyleBackColor = true;
@@ -209,7 +210,7 @@ namespace CW_RC5
             this.MessageTextBox.Multiline = true;
             this.MessageTextBox.Name = "MessageTextBox";
             this.MessageTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.MessageTextBox.Size = new System.Drawing.Size(490, 68);
+            this.MessageTextBox.Size = new System.Drawing.Size(492, 69);
             this.MessageTextBox.TabIndex = 0;
             this.MessageTextBox.TextChanged += new System.EventHandler(this.MessageTextBox_TextChanged);
             // 
@@ -219,7 +220,7 @@ namespace CW_RC5
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label3.Location = new System.Drawing.Point(3, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(490, 26);
+            this.label3.Size = new System.Drawing.Size(492, 26);
             this.label3.TabIndex = 2;
             this.label3.Text = "Введите сообщение:";
             this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -335,7 +336,7 @@ namespace CW_RC5
             // ВыходToolStripMenuItem
             // 
             this.ВыходToolStripMenuItem.Name = "ВыходToolStripMenuItem";
-            this.ВыходToolStripMenuItem.Size = new System.Drawing.Size(217, 26);
+            this.ВыходToolStripMenuItem.Size = new System.Drawing.Size(138, 26);
             this.ВыходToolStripMenuItem.Text = "Вы&ход";
             this.ВыходToolStripMenuItem.Click += new System.EventHandler(this.ВыходToolStripMenuItem_Click);
             // 
@@ -350,7 +351,7 @@ namespace CW_RC5
             // НастройкиToolStripMenuItem
             // 
             this.НастройкиToolStripMenuItem.Name = "НастройкиToolStripMenuItem";
-            this.НастройкиToolStripMenuItem.Size = new System.Drawing.Size(217, 26);
+            this.НастройкиToolStripMenuItem.Size = new System.Drawing.Size(170, 26);
             this.НастройкиToolStripMenuItem.Text = "&Настройки";
             this.НастройкиToolStripMenuItem.Click += new System.EventHandler(this.НастройкиToolStripMenuItem_Click);
             // 
@@ -365,7 +366,7 @@ namespace CW_RC5
             // ОпрограммеToolStripMenuItem
             // 
             this.ОпрограммеToolStripMenuItem.Name = "ОпрограммеToolStripMenuItem";
-            this.ОпрограммеToolStripMenuItem.Size = new System.Drawing.Size(217, 26);
+            this.ОпрограммеToolStripMenuItem.Size = new System.Drawing.Size(198, 26);
             this.ОпрограммеToolStripMenuItem.Text = "&О программе...";
             this.ОпрограммеToolStripMenuItem.Click += new System.EventHandler(this.ОпрограммеToolStripMenuItem_Click);
             // 
@@ -382,6 +383,7 @@ namespace CW_RC5
             this.MinimumSize = new System.Drawing.Size(530, 370);
             this.Name = "MainForm";
             this.Text = "Шифрование RC5";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
